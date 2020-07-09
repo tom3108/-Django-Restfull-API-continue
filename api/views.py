@@ -11,12 +11,19 @@ from rest_framework.decorators import action
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
+    serializer_class = UserSerializer
 
 class MovieViewSet(viewsets.ModelViewSet):
     serializer_class = MovieSerializer
     def get_queryset(self):
-        qs = Movie.objects.all()
-        #qs = Movie.objects.filter(after_prem=True)
+        year = self.request.query_params.get('year', None)
+        title = self.request.query_params.get('title', None)
+        if year and title:
+            qs = Movie.objects.filter(year=year, title=title)
+        else:
+            qs = Movie.objects.all()
+
+
         return qs
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()

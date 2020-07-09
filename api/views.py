@@ -22,12 +22,13 @@ class MovieViewSet(viewsets.ModelViewSet):
             qs = Movie.objects.filter(year=year, title=title)
         else:
             qs = Movie.objects.all()
-
-
         return qs
     def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = MovieSerializer(queryset, many=True)
+        #queryset = self.get_queryset()
+        title = self.request.query_params.get('title', None)
+        #qs = Movie.objects.filter(title__contains=title)
+        qs = Movie.objects.filter(premiere__lte="2020-07-10")
+        serializer = MovieSerializer(qs, many=True)
         return Response(serializer.data)
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()

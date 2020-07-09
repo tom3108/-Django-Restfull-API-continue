@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 from rest_framework.response import Response
 from api.serializers import UserSerializer
 from .models import Movie, Rate, Actor
@@ -15,21 +15,25 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class MovieViewSet(viewsets.ModelViewSet):
     serializer_class = MovieSerializer
+    filter_backends = [filters.SearchFilter]
+    filterset_fields = ['title', 'content','year']
+    search_fields = ['title', 'content']
     def get_queryset(self):
-        year = self.request.query_params.get('year', None)
-        title = self.request.query_params.get('title', None)
-        if year and title:
-            qs = Movie.objects.filter(year=year, title=title)
-        else:
-            qs = Movie.objects.all()
+        #year = self.request.query_params.get('year', None)
+        #title = self.request.query_params.get('title', None)
+        #if year and title:
+            #qs = Movie.objects.filter(year=year, title=title)
+        #else:
+            #qs = Movie.objects.all()
+        qs = Movie.objects.all()
         return qs
-    def list(self, request, *args, **kwargs):
+   # def list(self, request, *args, **kwargs):
         #queryset = self.get_queryset()
-        title = self.request.query_params.get('title', None)
+        #title = self.request.query_params.get('title', None)
         #qs = Movie.objects.filter(title__contains=title)
-        qs = Movie.objects.filter(premiere__lte="2020-07-10")
-        serializer = MovieSerializer(qs, many=True)
-        return Response(serializer.data)
+        #qs = Movie.objects.filter(premiere__lte="2020-07-10")
+        #serializer = MovieSerializer(qs, many=True)
+        #return Response(serializer.data)
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = MovieSerializer(instance)

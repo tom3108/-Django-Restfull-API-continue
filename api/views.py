@@ -6,6 +6,13 @@ from .models import Movie, Rate, Actor
 from .serializers import MovieSerializer, RateSerializer, ActorSerializer
 from django.http.response import HttpResponseNotAllowed
 from rest_framework.decorators import action
+from rest_framework.pagination import PageNumberPagination
+
+class LargeResultsSetPagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+    max_page_size = 10
+
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -20,6 +27,7 @@ class MovieViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.OrderingFilter]
     ordering_fields = '__all__'
     ordering = ('year',)
+    pagination_class = LargeResultsSetPagination
 
 
     def get_queryset(self):

@@ -15,9 +15,13 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class MovieViewSet(viewsets.ModelViewSet):
     serializer_class = MovieSerializer
-    filter_backends = [filters.SearchFilter]
     filterset_fields = ['title', 'content','year']
     search_fields = ['title', 'content']
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = '__all__'
+    ordering = ('year',)
+
+
     def get_queryset(self):
         #year = self.request.query_params.get('year', None)
         #title = self.request.query_params.get('title', None)

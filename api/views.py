@@ -7,6 +7,7 @@ from .serializers import MovieSerializer, RateSerializer, ActorSerializer
 from django.http.response import HttpResponseNotAllowed
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.authentication import TokenAuthentication
 
 class LargeResultsSetPagination(PageNumberPagination):
     page_size = 5
@@ -28,6 +29,7 @@ class MovieViewSet(viewsets.ModelViewSet):
     ordering_fields = '__all__'
     ordering = ('year',)
     pagination_class = LargeResultsSetPagination
+    authentication_classes = (TokenAuthentication, )
 
 
     def get_queryset(self):

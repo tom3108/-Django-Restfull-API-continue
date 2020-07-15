@@ -8,6 +8,8 @@ from django.http.response import HttpResponseNotAllowed
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
+
 
 class LargeResultsSetPagination(PageNumberPagination):
     page_size = 5
@@ -30,6 +32,7 @@ class MovieViewSet(viewsets.ModelViewSet):
     ordering = ('year',)
     pagination_class = LargeResultsSetPagination
     authentication_classes = (TokenAuthentication, )
+    permission_classes = (DjangoModelPermissions,)
 
 
     def get_queryset(self):

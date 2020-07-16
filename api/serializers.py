@@ -6,8 +6,11 @@ from .models import Movie, ExtraInfo, Rate, Actor
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email']
-
+        fields = ['id', 'username', 'email','password']
+        extra_kwargs = {'password':{'required':True, 'write_only':True}}
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user
 
 class ExtraInfoSerializer(serializers.ModelSerializer):
     class Meta:
